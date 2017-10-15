@@ -1,0 +1,34 @@
+
+
+#title
+{
+	font-size: 30px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+
+.btn
+{
+	height: 80px;
+	width: 80px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#res
+{
+	margin-top: 30px;
+	text-align: center;
+}
+
+#zero
+{
+	height: 80px;
+	width: 175px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

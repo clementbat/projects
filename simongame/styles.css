@@ -1,0 +1,92 @@
+.opacityon
+{
+	opacity: 0.5;
+}
+
+.opacityoff
+{
+	opacity: 1;
+}
+
+.btn
+{
+	margin-left: 3px;
+	margin-right: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: 200px;
+    height: 200px;
+
+}
+
+#game .btn-success
+{
+    border-radius: 200px 0 0 0;
+    -moz-border-radius: 200px 0 0 0;
+    -webkit-border-radius: 200px 0 0 0;
+}
+
+#game .btn-danger
+{
+    border-radius:  0 200px 0 0;
+    -moz-border-radius: 0 200px 0 0;
+    -webkit-border-radius: 0 200px 0 0;
+}
+
+#game .btn-primary
+{
+    border-radius:  0 0 200px 0;
+    -moz-border-radius: 0 0 200px 0;
+    -webkit-border-radius: 0 0 200px 0;
+}
+
+#game .btn-warning
+{
+    border-radius:  0 0 0 200px;
+    -moz-border-radius: 0 0 0 200px;
+    -webkit-border-radius: 0 0 0 200px;
+}
+
+#start  
+{
+	height: 40px;
+	width: 80px;
+	margin-left: 50px;
+	margin-right: 30px;
+}
+
+#playground
+{
+	color:white;
+	margin-left: 30%;
+	margin-top: 100px;
+	border-radius: 100px 100px 400px 400px;
+	width:440px;
+	height: 535px;
+}
+
+#strict
+{
+	height: 40px;
+	width: 50px;
+}
+
+#strict-area
+{
+	margin-left: 30px;	
+}
+
+#game
+{
+	margin-left: 10px;
+}
+
+#serie
+{
+	margin-left: 30px;
+	height: 40px;
+	width: 70px;
+}
+
+
+

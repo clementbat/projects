@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <!--  Meta  -->
+  <meta charset="UTF-8" />
+  <title>Weather</title>
+  
+  <!--  Styles  -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="jumbotron" id="main">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-sm-9 col-md-7 col-lg-6 text-center">
+        <h1>The weather in your location</h1><br>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary active" id="Celsius">
+            <input type="radio" name="options" id="Celsius" autocomplete="off" checked>°C
+          </label>
+          <label class="btn btn-primary" id="Fahrenheit">
+            <input type="radio" name="options" id="Fahrenheit" autocomplete="off">°F
+          </label>
+        </div>
+        <br>
+        <img id="pic" class="img-responsive">
+        <div id="weather" class="display-4"></div>
+        <div id="temp" class="display-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+      
+  <!-- Scripts -->
+  
+
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+  <script src="scripts/index.js"></script>
+    
+
+</body>
+</html>
