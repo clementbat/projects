@@ -1,0 +1,36 @@
+#card
+{
+	background-color: white;
+	border-radius: 5px;
+	
+}
+
+#main
+{
+	border-radius: 0px;
+	position: absolute;
+    height: 90%;
+    width: 100%;
+    top:0%;
+    bottom: 10%;
+    -webkit-transition: background-color 1000ms linear, color 1000ms linear;
+    -ms-transition: background-color 1000ms linear, color 1000ms linear;
+    transition: background-color 1000ms linear, color 1000ms linear;
+}
+
+#social-media
+{
+	color:#484848;
+	text-align: center;
+	position: absolute;
+	height: 7%;
+	width:100%;
+	top:93%;
+	
+}
+
+#quote
+{
+	text-align: left;
+	font-size: 20px;
+}
