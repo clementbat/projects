@@ -1,7 +1,7 @@
 var receipe = [];
 var hist = {};
 
-if(sessionStorage.length === 0){
+if(typeof sessionStorage.receipes === "undefined"){
   receipe=[{
       "title": "Gateau au chocolat",
       "ingredients":["Farine", "Oeufs", "Chocolat"]
