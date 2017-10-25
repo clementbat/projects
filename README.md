@@ -5,20 +5,20 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 # Here is the list of the projects:
 
 ### [Pomodoro](https://clementbat.github.io/Pomodoro/index.html)
+
 #### User Stories:
 1. I can start a 25 minute pomodoro, and the timer will go off once 25 minutes has elapsed.
 1. I can reset the clock for my next pomodoro.
 1. I can customize the length of each pomodoro.
 
-------
-
+----
 ### [calculette](https://clementbat.github.io/calculette/index.html)
 #### User Stories:
 1. I can add, subtract, multiply and divide two numbers.
 1. I can clear the input field with a clear button.
 1. I can keep chaining mathematical operations together until I hit the equal button, and the calculator will tell me the correct output.
 
-------
+---
 ### [quote](https://clementbat.github.io/quote/index.html)
 ------
 ### [simongame](https://clementbat.github.io/simongame/index.html)
@@ -32,7 +32,9 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 ### [weather](https://clementbat.github.io/weather/index.html)
 ------
 
-## Build with reactjs
+
+
+# Build with reactjs
 
 ### [receipe](https://clementbat.github.io/receipe/index.html)
 
@@ -43,5 +45,4 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 1. I can edit these recipes.
 1. I can delete these recipes.
 1. All new recipes I add are saved in my browser's local storage. If I refresh the page, these recipes will still be there.
-------
 
