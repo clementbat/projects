@@ -99,7 +99,7 @@ class Board extends React.Component {
       }
       self.setState({squares: copy2});
       }
-      , 200);
+      , 400);
     
   }
 
