@@ -145,7 +145,7 @@ class Board extends React.Component {
     }
     return (
       <div>
-        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(5)}>GO</button>
+        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(10)}>GO</button>
         <button id='stop' className="btn btn-danger" onClick={() => this.stopAnimate()}>stop</button>
         {board}
       </div>
