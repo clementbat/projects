@@ -34,13 +34,13 @@ body {
 }
 
 .on{
-	background-color:#e44;
+	background-color:black;
 	width:10px;
 	height:10px;
 }
 
 .off{
-	background-color:black;
+	background-color:white;
 	width:10px;
 	height:10px;
 }
