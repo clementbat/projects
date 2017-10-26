@@ -35,14 +35,25 @@ for (var j = 0; j < size*size; j++) {
   voisins[j] = neighborhood(j);
 }
 
-
 class Square extends React.Component {
   render() {
-    if(this.props.value === true){
-      return <button className="btn on" onClick={() => this.props.onClick()}></button>
-    }else{
-      return <button className="btn off" onClick={() => this.props.onClick()}></button>
+    let classname;
+    if(this.props.index === size*(size - 1)){
+      classname = "angle"
+    }else if(this.props.index % size === 0){
+      classname = "side"
+    }else if(this.props.index >= size*(size - 1)){
+      classname = "bottom"
     }
+
+    if(this.props.value === true){
+      classname = classname + " btn on"
+    }else if(this.props.value === false){
+      classname = classname + " btn off"
+    }
+    
+    return <button className={classname} onClick={() => this.props.onClick()}></button>
+    
   }
 }
 
@@ -76,6 +87,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return <Square
             key={i}
+            index={i}
             value={this.state.squares[i]} 
             onClick={()=> this.handleClick(i)}
             />;
@@ -143,7 +155,7 @@ class Board extends React.Component {
     for (var i = j*size; i < size*(j+1) ; i++) {
       squareline.push(this.renderSquare(i))
     } 
-    return  <div key={j} className="row">{squareline}</div>;
+    return  <div key={j}>{squareline}</div>;
   }
 
   render() {
@@ -153,11 +165,11 @@ class Board extends React.Component {
     }
     return (
       <div>
-        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(5)}>GO</button>
+        <button id='go' className="btn btn-success" onClick={() => this.startAnimating(10)}>start</button>
         <button id='stop' className="btn btn-danger" onClick={() => this.stopAnimate()}>stop</button>
         <button id='clear' className="btn btn-secondary" onClick={() => this.clearBoard()}>clear</button>
         Generation {this.generation}
-        {board}
+        <div className="board">{board}</div>
       </div>
     );
   }
@@ -166,10 +178,8 @@ class Board extends React.Component {
 class App extends React.Component {
   render(){
     return (
-      <div className="container">
-        <div className="row justify-content-center">
-          <Board />
-        </div>
+      <div className="page">
+        <Board />
       </div>
       );
   }
