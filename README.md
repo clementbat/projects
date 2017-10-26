@@ -46,3 +46,14 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 1. I can delete these recipes.
 1. All new recipes I add are saved in my browser's local storage. If I refresh the page, these recipes will still be there.
 
+---
+### [gameoflife](https://clementbat.github.io/gameoflife/index.html)
+
+#### User Stories:
+1. When I first arrive at the game, it will randomly generate a board.
+1. I can start and stop the board.
+1. I can set up the board.
+1. I can clear the board.
+1. When I press start, the game will play out.
+1. Each time the board changes, I can see how many generations have gone by.
+
