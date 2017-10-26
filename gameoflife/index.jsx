@@ -64,6 +64,7 @@ class Board extends React.Component {
     this.then;
     this.elapsed;
     this.stop = false;
+    this.generation = 0;
   }
 
   handleClick(i) {
@@ -98,6 +99,7 @@ class Board extends React.Component {
     if(this.elapsed > this.fpsInterval){
       this.then = this.now - (this.elapsed % this.fpsInterval);
       this.next();
+      this.generation++;
 
     }
   }
@@ -130,6 +132,12 @@ class Board extends React.Component {
     this.stop = true
   }
 
+  clearBoard(){
+    var copy = Array(size*size).fill(false);
+    this.setState({squares: copy});
+    this.generation = 0;
+  }
+
   SquareLine(j) {
     let squareline = [];
     for (var i = j*size; i < size*(j+1) ; i++) {
@@ -145,8 +153,9 @@ class Board extends React.Component {
     }
     return (
       <div>
-        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(10)}>GO</button>
+        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(5)}>GO</button>
         <button id='stop' className="btn btn-danger" onClick={() => this.stopAnimate()}>stop</button>
+        <button id='clear' className="btn btn-secondary" onClick={() => this.clearBoard()}>clear</button>
         {board}
       </div>
     );
