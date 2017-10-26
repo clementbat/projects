@@ -1,5 +1,4 @@
 const size = 60;
-var intervalid;
 
 function neighborhood(el){
     switch(el){
@@ -50,6 +49,9 @@ class Square extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props);
+    this.animate = this.animate.bind(this);
+    this.stopAnimate = this.stopAnimate.bind(this);
+
     const random =[];
     for (var i = 0; i < size*size; i++) {
       random[i]= (Math.random() >= 0.8)
@@ -57,6 +59,11 @@ class Board extends React.Component {
     this.state = {
       squares: random
     };
+    this.now;
+    this.fpsInterval;
+    this.then;
+    this.elapsed;
+    this.stop = false;
   }
 
   handleClick(i) {
@@ -73,38 +80,54 @@ class Board extends React.Component {
             />;
   }
   
-
-  next(){
-    var self=this;
-    intervalid = setInterval(function(){
-      const squares = self.state.squares.slice();
-      const copy2 = self.state.squares.slice();
-      for (var j = 0; j < size*size; j++) {
-        let count= 0;
-        const voisinscourant = voisins[j];
-        for (var i = 0; i < voisinscourant.length; i++) {
-          if(squares[voisinscourant[i]] === true){
-              count = count + 1;
-          }
-        }
-        if(count < 2){
-          copy2[j] = false
-        }else if(count === 3 && squares[j] === false){
-          copy2[j] = true;
-        }else if((count === 2 || count === 3) && squares[j] === true){
-          copy2[j] = true;
-        }else{
-          copy2[j] = false;
-        }
-      }
-      self.setState({squares: copy2});
-      }
-      , 100);
-    
+  startAnimating(fps){
+    this.stop = false;
+    this.fpsInterval = 1000/fps;
+    this.then = Date.now();
+    this.animate();
   }
 
-  stop(){
-    clearInterval(intervalid);
+  animate(){
+    if(this.stop){return;}
+
+    requestAnimationFrame(this.animate);
+
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
+
+    if(this.elapsed > this.fpsInterval){
+      this.then = this.now - (this.elapsed % this.fpsInterval);
+      this.next();
+
+    }
+  }
+
+  next(){
+    const squares = this.state.squares.slice();
+    const copy2 = this.state.squares.slice();
+    for (var j = 0; j < size*size; j++) {
+      let count= 0;
+      const voisinscourant = voisins[j];
+      for (var i = 0; i < voisinscourant.length; i++) {
+        if(squares[voisinscourant[i]] === true){
+            count = count + 1;
+        }
+      }
+      if(count < 2){
+        copy2[j] = false
+      }else if(count === 3 && squares[j] === false){
+        copy2[j] = true;
+      }else if((count === 2 || count === 3) && squares[j] === true){
+        copy2[j] = true;
+      }else{
+        copy2[j] = false;
+      }
+    }
+    this.setState({squares: copy2});
+  }
+
+  stopAnimate(){
+    this.stop = true
   }
 
   SquareLine(j) {
@@ -122,8 +145,8 @@ class Board extends React.Component {
     }
     return (
       <div>
-        <button id='go' className="btn btn-primary" onClick={() => this.next()}>GO</button>
-        <button id='stop' className="btn btn-danger" onClick={() => this.stop()}>stop</button>
+        <button id='go' className="btn btn-primary" onClick={() => this.startAnimating(10)}>GO</button>
+        <button id='stop' className="btn btn-danger" onClick={() => this.stopAnimate()}>stop</button>
         {board}
       </div>
     );
