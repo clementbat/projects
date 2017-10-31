@@ -45,6 +45,7 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 1. I can play a game of Tic Tac Toe with the computer.
 1. My game will reset as soon as it's over so I can play again.
 1. I can choose whether I want to play as X or O.
+
 ------
 ### [twitchtv](https://clementbat.github.io/twitchtv/index.html)
 
@@ -52,6 +53,7 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 1. I can see whether Free Code Camp is currently streaming on Twitch.tv.
 1. I can click the status output and be sent directly to the Free Code Camp's Twitch.tv channel.
 1. If a Twitch user is currently streaming, I can see additional details about what they are streaming.
+
 ------
 ### [wikiviewer](https://clementbat.github.io/wikiviewer/index.html)
 
@@ -59,6 +61,7 @@ Here are some front end projects I did with [freecodecamp](https://freecodecamp.
 1. I can search Wikipedia entries in a search box and see the resulting Wikipedia entries.
 1. I can click a button to see a random Wikipedia entry.
 1. I can choose whether I want to play as X or O.
+
 ------
 ### [weather](https://clementbat.github.io/weather/index.html)
 
