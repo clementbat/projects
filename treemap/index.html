@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Treemap demo</title>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+.rectangle:hover {
+  fill: red;
+}
+
+.rectangle {
+  fill: grey;
+}
+
+</style>
+
+</head>
+<body>
+
+<script src="https://unpkg.com/vue"></script>
+
+<div id="app">
+  <div class="hello">
+    data: {{msg}}
+    <br>
+    <svg width="600" height="400">
+      <g v-for="(rect, index) in dataset.data">
+        <rect 
+          v-on:click="clicked(dataset.name[index])" 
+          v-on:mouseover="moused(dataset.name[index])" 
+          class="rectangle" 
+          :x=rect[0] 
+          :y=rect[1] 
+          :width="rect[2]" 
+          :height="rect[3]" 
+          style="stroke-width:3;stroke:rgb(0,0,0)" />
+        <text 
+          :x=rect[0]+20 
+          :y=rect[1]+50 
+          font-family="Verdana" 
+          font-size="35" 
+          fill="white">
+          {{dataset.name[index]}}
+        </text>
+      </g>
+      Sorry, your browser does not support inline SVG.  
+    </svg>
+    <br>
+    The text being moused over: {{text}}
+  </div>
+</div>
+
+<script>
+	new Vue({
+	  el: '#app',
+	  data() {
+	    return {
+	      msg: 'Welcome to Your Vue.js App',
+	      dataset: [],
+	      text: ''
+	    };
+	  },
+	  mounted() {
+	    let data = [
+	      9,
+	      3,
+	      3,
+	      2,
+	      2,
+	      1,
+	      1,
+	      1,
+	      1,
+	    ]
+
+	    this.msg = data.slice(0)
+
+	    const Rectangle = {
+	      data: [],
+	      xbegining: 0,
+	      ybegining: 0,
+	      totalWidth: 6,
+	      totalHeight: 4
+	    }
+
+	    const sum = (acc, cur) => acc += cur
+
+	    const arrayMax = arr => arr.slice(0).sort().pop()
+
+	    const arrayMMin = arr => arr.slice(0).sort()[0]
+
+	    const worst = (R, w) => {
+	      const s = R.reduce(sum, 0)
+	      const rPlus = arrayMax(R)
+	      const rMoins = arrayMMin(R)
+	      return Math.max(w ** 2 * rPlus / (s ** 2), s ** 2 /( w ** 2 * rMoins))
+	    }
+
+	    const width = () => {
+	      if((Rectangle.totalHeight) ** 2 > (Rectangle.totalWidth) ** 2) {
+	        return { width: Rectangle.totalWidth, vertical: false }
+	      }
+	      return { width: Rectangle.totalHeight, vertical: true }
+	    }
+
+	    const layoutRow = (rows, width, vertical) => {
+	      const height = rows.reduce(sum) / width
+	      rows.forEach(row => {
+	        const rowWidth = row / height
+	        if(vertical) {
+	          Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + height, Rectangle.ybegining + rowWidth])
+	          Rectangle.xbegining += 0
+	          Rectangle.ybegining += rowWidth
+	        } else {
+	          Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + rowWidth, Rectangle.ybegining + height])
+	          Rectangle.xbegining += rowWidth
+	          Rectangle.ybegining += 0
+	        }
+	      })
+	      if(vertical) {
+	        Rectangle.xbegining += height
+	        Rectangle.ybegining -= width
+	      } else {
+	        Rectangle.xbegining -= width
+	        Rectangle.ybegining += height
+	      }
+	      return height
+	    }
+
+	    const squarify = (children, rows, w) => {
+	      if(children.length === 0) {
+	        layoutRow(rows, w, width().vertical)
+	      }
+	      const c = data[0]
+	      const rowsWithC = rows.slice(0)
+	      rowsWithC.push(c)
+	      if(isNaN(worst(rows, w)) || worst(rows, w) >= worst(rowsWithC, w)) {
+	        if(children.length > 1) {
+	          children.shift()
+	          squarify(children, rowsWithC, w)
+	        } else if(children.length === 1){
+	          layoutRow([children], w, width().vertical)
+	          children.shift()
+	        }
+	      } else {
+	        const height = layoutRow(rows, w, width().vertical)
+	        const vert = width().vertical
+	        Rectangle.totalWidth = vert ? Rectangle.totalWidth - height : Rectangle.totalWidth
+	        Rectangle.totalHeight = vert ? Rectangle.totalHeight : Rectangle.totalHeight - height
+
+	        squarify(children, [], width().width)
+	      }
+	    }
+
+	    data = data.map(el => el * 24 / data.reduce(sum))
+
+	    squarify(data, [], width().width)
+	    Rectangle.data.forEach(rect => {
+	      rect[2] -= rect[0]
+	      rect[3] -= rect[1]
+	      rect.forEach((coordinate, index) => {
+	        rect[index] = Math.round(coordinate * 100) / 100 * 100
+	      })
+	    })
+
+	    this.dataset = {data: Rectangle.data, name: this.msg}
+
+	  },
+	  methods: {
+	    clicked: function(id) {
+	      alert(id)
+	    },
+	    moused: function(text) {
+	      this.text = text
+	    }
+	  }
+	})
+
+</script>
+</body>
+</html>
