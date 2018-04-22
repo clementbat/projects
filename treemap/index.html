@@ -10,15 +10,67 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
 }
 
 .rectangle:hover {
-  fill: red;
+  opacity: 1;
 }
 
 .rectangle {
-  fill: grey;
+  opacity: 0.4;
+}
+
+.hello {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+}
+
+input {
+  margin-top: 5px;
+  width: 40px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #E0E0E0;
+  border-radius: 3px;
+}
+
+button {
+  border: 1px solid #4DB6AC;
+  color: #4DB6AC;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button.reload {
+  margin-top: 30px;
+  width: 78px;
+  height: 30px;
+}
+
+button:hover {
+  background-color: #4DB6AC;
+  color:white;
+}
+
+button.delete-data-point {
+  width: 30px;
+  height: 21px;
+  color: #FF5722;
+  border-color: #FF5722;
+}
+
+button:hover.delete-data-point {
+  color: white;
+  background-color: #FF5722;
+}
+
+button.add-data-point {
+  width: 30px;
+  height: 21px;
 }
 
 </style>
@@ -30,32 +82,59 @@
 
 <div id="app">
   <div class="hello">
-    data: {{msg}}
-    <br>
-    <svg width="600" height="400">
-      <g v-for="(rect, index) in dataset.data">
-        <rect 
-          v-on:click="clicked(dataset.name[index])" 
-          v-on:mouseover="moused(dataset.name[index])" 
-          class="rectangle" 
-          :x=rect[0] 
-          :y=rect[1] 
-          :width="rect[2]" 
-          :height="rect[3]" 
-          style="stroke-width:3;stroke:rgb(0,0,0)" />
-        <text 
-          :x=rect[0]+20 
-          :y=rect[1]+50 
-          font-family="Verdana" 
-          font-size="35" 
-          fill="white">
-          {{dataset.name[index]}}
-        </text>
-      </g>
-      Sorry, your browser does not support inline SVG.  
-    </svg>
-    <br>
-    The text being moused over: {{text}}
+    <div>
+      Change the data here:<br><br>
+	    <div v-for="(item, index) in data">
+	      <input
+	        v-model="data[index]"
+	        v-on:change="refreshTreemap(data)">
+	      <button class="delete-data-point" v-on:click="data.splice(index, 1); refreshTreemap(data)">X</button>
+	    </div>
+	    <br>
+	    <div>
+	      <input
+	          v-model="inputNewData"
+	          v-on:keyup.enter="addNewData"
+	          placeholder="Add"
+	        >
+	      <button class="add-data-point" v-on:click="addNewData">+</button>
+	    </div>
+	    <button class="reload" v-on:click="refreshTreemap(data)">Refresh</button>
+      <div v-if="text">
+        <br><br>Current data: {{text}}
+      </div>
+      <div v-if="errorText">
+        <br><br>
+        {{errorText}}
+      </div>
+    </div>
+    <div>
+	    <svg width="900" height="600">
+	      <g
+	        v-for="(rect, index) in dataset.data"
+	        v-on:click="clicked(dataset.name[index])"
+	        v-on:mouseenter="moused(dataset.name[index])"
+	        v-on:mouseleave="unmoused"
+	        class="rectangle"
+	        :fill="dataset.colors[index]">
+	        <rect
+	          :x=rect[0]
+	          :y=rect[1]
+	          :width="rect[2]"
+	          :height="rect[3]"
+	          style="stroke-width:1;stroke:white" />
+	        <text
+	          :x=rect[0]+rect[2]/2-8
+	          :y=rect[1]+rect[3]/2+8
+	          font-family="Avenir"
+	          font-size="16"
+	          fill="white">
+	          {{dataset.name[index]}}
+	        </text>
+	      </g>
+	      Sorry, your browser does not support inline SVG.
+	    </svg>
+    </div>
   </div>
 </div>
 
@@ -64,125 +143,180 @@
 	  el: '#app',
 	  data() {
 	    return {
-	      msg: 'Welcome to Your Vue.js App',
 	      dataset: [],
-	      text: ''
+	      text: '',
+	      inputNewData: '',
+	      data: [
+	        10,
+	        7,
+	        4,
+	        1,
+	        5,
+	        9,
+	      ],
+	      colors: [],
+	      errorText: ''
 	    };
 	  },
 	  mounted() {
-	    let data = [
-	      9,
-	      3,
-	      3,
-	      2,
-	      2,
-	      1,
-	      1,
-	      1,
-	      1,
-	    ]
-
-	    this.msg = data.slice(0)
-
-	    const Rectangle = {
-	      data: [],
-	      xbegining: 0,
-	      ybegining: 0,
-	      totalWidth: 6,
-	      totalHeight: 4
-	    }
-
-	    const sum = (acc, cur) => acc += cur
-
-	    const arrayMax = arr => arr.slice(0).sort().pop()
-
-	    const arrayMMin = arr => arr.slice(0).sort()[0]
-
-	    const worst = (R, w) => {
-	      const s = R.reduce(sum, 0)
-	      const rPlus = arrayMax(R)
-	      const rMoins = arrayMMin(R)
-	      return Math.max(w ** 2 * rPlus / (s ** 2), s ** 2 /( w ** 2 * rMoins))
-	    }
-
-	    const width = () => {
-	      if((Rectangle.totalHeight) ** 2 > (Rectangle.totalWidth) ** 2) {
-	        return { width: Rectangle.totalWidth, vertical: false }
+	    let i = 0; 
+	    while (i < 100) {
+	      const greyShade = Math.round(Math.random() * 150);
+	      
+	      function componentToHex(c) {
+	        const hex = c.toString(16);
+	        return hex.length == 1 ? "0" + hex : hex;
 	      }
-	      return { width: Rectangle.totalHeight, vertical: true }
-	    }
 
-	    const layoutRow = (rows, width, vertical) => {
-	      const height = rows.reduce(sum) / width
-	      rows.forEach(row => {
-	        const rowWidth = row / height
-	        if(vertical) {
-	          Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + height, Rectangle.ybegining + rowWidth])
-	          Rectangle.xbegining += 0
-	          Rectangle.ybegining += rowWidth
-	        } else {
-	          Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + rowWidth, Rectangle.ybegining + height])
-	          Rectangle.xbegining += rowWidth
-	          Rectangle.ybegining += 0
-	        }
-	      })
-	      if(vertical) {
-	        Rectangle.xbegining += height
-	        Rectangle.ybegining -= width
-	      } else {
-	        Rectangle.xbegining -= width
-	        Rectangle.ybegining += height
+	      function rgbToHex(r, g, b) {
+	        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 	      }
-	      return height
+	      
+	      this.colors.push(rgbToHex(greyShade, greyShade, greyShade));
+	      
+	      i += 1;
+
+	      this.dataset.colors = this.colors;
 	    }
-
-	    const squarify = (children, rows, w) => {
-	      if(children.length === 0) {
-	        layoutRow(rows, w, width().vertical)
-	      }
-	      const c = data[0]
-	      const rowsWithC = rows.slice(0)
-	      rowsWithC.push(c)
-	      if(isNaN(worst(rows, w)) || worst(rows, w) >= worst(rowsWithC, w)) {
-	        if(children.length > 1) {
-	          children.shift()
-	          squarify(children, rowsWithC, w)
-	        } else if(children.length === 1){
-	          layoutRow([children], w, width().vertical)
-	          children.shift()
-	        }
-	      } else {
-	        const height = layoutRow(rows, w, width().vertical)
-	        const vert = width().vertical
-	        Rectangle.totalWidth = vert ? Rectangle.totalWidth - height : Rectangle.totalWidth
-	        Rectangle.totalHeight = vert ? Rectangle.totalHeight : Rectangle.totalHeight - height
-
-	        squarify(children, [], width().width)
-	      }
-	    }
-
-	    data = data.map(el => el * 24 / data.reduce(sum))
-
-	    squarify(data, [], width().width)
-	    Rectangle.data.forEach(rect => {
-	      rect[2] -= rect[0]
-	      rect[3] -= rect[1]
-	      rect.forEach((coordinate, index) => {
-	        rect[index] = Math.round(coordinate * 100) / 100 * 100
-	      })
-	    })
-
-	    this.dataset = {data: Rectangle.data, name: this.msg}
-
+	    this.dataset.colors = this.colors
+	    this.loadTreemap(this.data);
 	  },
 	  methods: {
-	    clicked: function(id) {
-	      alert(id)
+	    addNewData() {
+	      if (this.inputNewData && !isNaN(this.inputNewData)) {
+	        this.data.push(this.inputNewData);
+	        this.refreshTreemap(this.data);
+	      }
+	      this.inputNewData = '';
 	    },
-	    moused: function(text) {
+	    refreshTreemap(data) {
+	      this.errorText = ''
+	      data.forEach((dataPoint) => {
+	        if (isNaN(dataPoint) || dataPoint < 0) {
+	          this.errorText = 'Please enter positive data points';
+	        }
+	      })
+	      if (!this.errorText) {
+	        this.loadTreemap(JSON.parse('[' + data + ']'));
+	      }
+	    },
+	    clicked(id) {
+	      alert(`Data clicked: ${id}`);
+	    },
+	    moused(text) {
 	      this.text = text
-	    }
-	  }
+	    },
+	    unmoused(text) {
+	      this.text = ''
+	    },
+	    loadTreemap(dataArg) {
+	      let data = dataArg.slice(0);
+
+	      const datasetName = data.slice(0);
+
+	      const Rectangle = {
+	        data: [],
+	        xbegining: 0,
+	        ybegining: 0,
+	        totalWidth: 9,
+	        totalHeight: 6,
+	      };
+
+	      const sum = (acc, cur) => acc += cur;
+
+	      const arrayMax = arr => arr.slice(0).sort().pop();
+
+	      const arrayMMin = arr => arr.slice(0).sort()[0];
+
+	      const worst = (R, w) => {
+	        const s = R.reduce(sum, 0);
+	        const rPlus = arrayMax(R);
+	        const rMoins = arrayMMin(R);
+	        return Math.max(Math.pow(w, 2) * rPlus / (Math.pow(s, 2)), Math.pow(s, 2) / (Math.pow(w, 2) * rMoins));
+	      };
+
+	      const width = () => {
+	        if ((Rectangle.totalHeight) ** 2 > (Rectangle.totalWidth) ** 2) {
+	          return { width: Rectangle.totalWidth, vertical: false };
+	        }
+	        return { width: Rectangle.totalHeight, vertical: true };
+	      };
+
+	      const layoutRow = (rows, width, vertical) => {
+	        const height = rows.reduce(sum) / width;
+	        rows.forEach((row) => {
+	          const rowWidth = row / height;
+	          if (vertical) {
+	            Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + height, Rectangle.ybegining + rowWidth]);
+	            Rectangle.xbegining += 0;
+	            Rectangle.ybegining += rowWidth;
+	          } else {
+	            Rectangle.data.push([Rectangle.xbegining, Rectangle.ybegining, Rectangle.xbegining + rowWidth, Rectangle.ybegining + height]);
+	            Rectangle.xbegining += rowWidth;
+	            Rectangle.ybegining += 0;
+	          }
+	        });
+
+	        if (vertical) {
+	          Rectangle.xbegining += height;
+	          Rectangle.ybegining -= width;
+	        } else {
+	          Rectangle.xbegining -= width;
+	          Rectangle.ybegining += height;
+	        }
+	        return height;
+	      };
+
+	      const squarify = (children, rows, w) => {
+	        if (children.length === 0) {
+	          layoutRow(rows, w, width().vertical);
+	        }
+	        const c = data[0];
+	        const rowsWithC = rows.slice(0);
+
+	        rowsWithC.push(c);
+
+	        if (isNaN(worst(rows, w)) || worst(rows, w) >= worst(rowsWithC, w)) {
+	          if (children.length > 1) {
+	            children.shift();
+	            squarify(children, rowsWithC, w);
+	          } else if (children.length === 1) {
+	            if (rows.length > 0) {
+	              layoutRow(rows, w, width().vertical);
+	            }
+	            layoutRow(children, w, width().vertical);
+	            children.shift();
+	          }
+	        } else {
+
+	          const height = layoutRow(rows, w, width().vertical);
+	          const vert = width().vertical;
+
+	          Rectangle.totalWidth = vert ? Rectangle.totalWidth - height : Rectangle.totalWidth;
+	          Rectangle.totalHeight = vert ? Rectangle.totalHeight : Rectangle.totalHeight - height;
+
+	          squarify(children, [], width().width);
+	        }
+	      };
+
+	      data = data.map(el => (el * Rectangle.totalHeight * Rectangle.totalWidth) / data.reduce(sum));
+
+	      squarify(data, [], width().width);
+	      Rectangle.data.forEach((rect) => {
+	        rect[2] -= rect[0];
+	        rect[3] -= rect[1];
+	        rect.forEach((coordinate, index) => {
+	          rect[index] = Math.round(coordinate * 100);
+	        });
+	      });
+
+	      this.dataset = {
+	        data: Rectangle.data,
+	        name: datasetName,
+	        colors: this.colors,
+	      };
+	    },
+	  },
 	})
 
 </script>
