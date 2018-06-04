@@ -15,6 +15,7 @@
 
 .rectangle:hover {
   opacity: 1;
+  cursor: pointer;
 }
 
 .rectangle {
@@ -108,8 +109,8 @@ button.add-data-point {
         {{errorText}}
       </div>
     </div>
-    <div>
-	    <svg width="900" height="600">
+    <div style="width: 100%;">
+	    <svg width="100%" height="600">
 	      <g
 	        v-for="(rect, index) in dataset.data"
 	        v-on:click="clicked(dataset.name[index])"
@@ -118,13 +119,13 @@ button.add-data-point {
 	        class="rectangle"
 	        :fill="dataset.colors[index]">
 	        <rect
-	          :x=rect[0]
+	          :x="`${rect[0]*100/900}%`"
 	          :y=rect[1]
-	          :width="rect[2]"
+	          :width="`${rect[2]*100/900}%`"
 	          :height="rect[3]"
 	          style="stroke-width:1;stroke:white" />
 	        <text
-	          :x=rect[0]+rect[2]/2-8
+	          :x="`${rect[0]*100/900+rect[2]/2*100/900}%`"
 	          :y=rect[1]+rect[3]/2+8
 	          font-family="Avenir"
 	          font-size="16"
